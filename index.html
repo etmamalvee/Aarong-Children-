@@ -8,13 +8,13 @@
   @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Barlow:wght@400;500;600;700&display=swap');
 
   :root {
-    --green-dark: #114b11;     /* আরো ডার্ক করা হয়েছে টেক্সট ক্লিয়ার করার জন্য */
+    --green-dark: #114b11;
     --green-mid: #1e6b1e;
     --green-light: #a3ffa3;
-    --green-pale: #d4f7d4;     /* হালকা ব্যাকগ্রাউন্ড যাতে ভেতরের কালো লেখা ক্লিয়ার বুঝা যায় */
+    --green-pale: #d4f7d4;
     --yellow: #FFD700;
     --orange: #E67E22;
-    --red-light: #ffe3e3;      /* টেক্সট ক্লিয়ার করার জন্য ব্যাকগ্রাউন্ড আরো লাইট করা হয়েছে */
+    --red-light: #ffe3e3;
     --blue-light: #cfe2ff;
     --white: #ffffff;
     --border: #444;
@@ -23,7 +23,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    background: #111122;       /* ব্যাকগ্রাউন্ড আরো ডার্ক করা হয়েছে যাতে কার্ডটি ফুটে উঠে */
+    background: #111122;
     font-family: 'Barlow', sans-serif;
     min-height: 100vh;
     display: flex;
@@ -85,6 +85,15 @@
   }
   .controls button:hover { background: var(--green-dark); transform: scale(1.02); }
 
+  /* Download button custom style */
+  .btn-download {
+    background: #2980b9 !important;
+    border-color: #3498db !important;
+  }
+  .btn-download:hover {
+    background: #1f618d !important;
+  }
+
   /* ===== MAIN ROSTER CARD ===== */
   .roster-card {
     background: #f4faf4;
@@ -142,13 +151,13 @@
     padding: 6px 10px;
     border: 1px solid #999;
     font-size: 0.95rem;
-    color: #000;      /* লেখাগুলো একদম নিখুঁত কালো করা হয়েছে */
-    font-weight: 600; /* ফন্ট কিছুটা বোল্ড করা হয়েছে পড়ার সুবিধার জন্য */
+    color: #000;
+    font-weight: 600;
     text-align: center;
   }
 
   .row-morning { background: var(--green-pale); }
-  .row-both { background: #ffe0b2; } /* উভয় শিফটের জন্য সুন্দর অরেঞ্জ আভা */
+  .row-both { background: #ffe0b2; }
   .row-evening { background: var(--red-light); }
   .row-zero { background: #e0e0e0; color: #666; }
   .row-total-label { background: var(--blue-light); font-weight: 700; }
@@ -233,7 +242,7 @@
     letter-spacing: 2px;
     padding: 12px;
     border-top: 4px solid var(--green-dark);
-    margin-top: auto; /* বক্সে সবসময় নিচে থাকবে */
+    margin-top: auto;
   }
 
   /* ===== EDIT MODAL ===== */
@@ -325,6 +334,8 @@
   }
   .chip.selected { background: var(--yellow); border-color: var(--yellow); color: #000; font-weight: 700; }
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -346,6 +357,7 @@
   <input type="date" id="dateInput">
 
   <button onclick="openEditModal()">✏️ Edit</button>
+  <button class="btn-download" onclick="downloadRosterImage()">📥 Download Image</button>
 </div>
 
 <div class="roster-card" id="rosterCard">
@@ -428,7 +440,6 @@ function render() {
   let morningTotal = data.morning.length;
   let eveningTotal = data.evening.length;
 
-  // ===== [FIX ১]: Morning আগে, তারপর Both, সবশেষে Evening সাজানো লজিক =====
   ALL_CHILDREN.forEach(name => {
     const isMorning = morningSet.has(name);
     const isEvening = eveningSet.has(name);
@@ -442,7 +453,6 @@ function render() {
     }
   });
 
-  // ক্রমানুসারে রো-গুলোকে একসাথে যোগ করা
   let tableRows = morningRows + bothRows + eveningRows;
 
   let leaveRows = '';
@@ -501,6 +511,25 @@ function render() {
       </div>
     </div>
   `;
+}
+
+// ===== IMAGE DOWNLOAD FUNCTION =====
+function downloadRosterImage() {
+  const rosterCard = document.getElementById('rosterCard');
+  const selectedDay = document.getElementById('daySelect').value;
+  const selectedDate = document.getElementById('dateInput').value || 'roster';
+
+  // Render complete hote 50ms time thakbe high-qualityr jonno
+  html2canvas(rosterCard, {
+    scale: 2, // High resolution crisp image er jonno scale double kora hoyeche
+    backgroundColor: '#f4faf4',
+    useCORS: true
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `Roster_${selectedDay}_${selectedDate}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
 }
 
 function openEditModal() {
@@ -568,7 +597,6 @@ function saveEdit() {
   render();
 }
 
-// ===== AUTOMATIC BANGLADESH TIME & DATE INIT =====
 function setBangladeshDateTime() {
   const bdTimeString = new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" });
   const bdDate = new Date(bdTimeString);
@@ -585,10 +613,8 @@ function setBangladeshDateTime() {
   document.getElementById('daySelect').value = dayName;
 }
 
-// Initial Run
 setBangladeshDateTime();
 
-// Event: Date ম্যানুয়ালি পরিবর্তন করলে Day ড্রপডাউন পরিবর্তন হবে
 document.getElementById('dateInput').addEventListener('change', function() {
   if (this.value) {
     const d = new Date(this.value + 'T00:00:00');
@@ -598,7 +624,6 @@ document.getElementById('dateInput').addEventListener('change', function() {
   render();
 });
 
-// ===== [FIX ২]: Day ড্রপডাউন চেঞ্জ করলে নিচের বক্স ও Date ইনপুট দুটোই চেঞ্জ হওয়ার লজিক =====
 document.getElementById('daySelect').addEventListener('change', function() {
   const selectedDay = this.value;
   const currentDateVal = document.getElementById('dateInput').value;
@@ -609,7 +634,6 @@ document.getElementById('daySelect').addEventListener('change', function() {
     const currentDayIndex = currentD.getDay();
     const targetDayIndex = daysOfWeek.indexOf(selectedDay);
     
-    // দিনের ব্যবধান হিসাব করে ডেট পরিবর্তন করা
     let dayDiff = targetDayIndex - currentDayIndex;
     currentD.setDate(currentD.getDate() + dayDiff);
     
