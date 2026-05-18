@@ -81,7 +81,6 @@
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
   }
 
-  /* Interactive Button Styling & Animations */
   .controls button {
     background: var(--green-mid);
     color: #fff;
@@ -103,9 +102,7 @@
     box-shadow: 0 5px 15px rgba(30, 107, 30, 0.4);
   }
 
-  .controls button:active {
-    transform: translateY(1px);
-  }
+  .controls button:active { transform: translateY(1px); }
 
   .btn-download {
     background: #2980b9 !important;
@@ -116,7 +113,7 @@
     box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4) !important;
   }
 
-  /* ===== MAIN ROSTER CARD & ANIMATION ===== */
+  /* ===== MAIN ROSTER CARD ===== */
   .roster-card {
     background: #f4faf4;
     border: 4px solid var(--green-dark);
@@ -125,10 +122,12 @@
     width: 100%;
     max-width: 860px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    
-    /* Live Card Entrance Animation */
-    animation: cardEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
     opacity: 0;
+  }
+
+  /* Card load animation selector (will be temporarily disabled on capture) */
+  .roster-card.run-animation {
+    animation: cardEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
   }
 
   .roster-body {
@@ -141,7 +140,7 @@
     .left-section { border-right: none !important; border-bottom: 4px solid var(--green-dark); }
   }
 
-  /* ===== LEFT: CHILDREN TABLE ===== */
+  /* ===== LEFT SECTION ===== */
   .left-section {
     flex: 1.1;
     border-right: 4px solid var(--green-dark);
@@ -182,8 +181,8 @@
     text-align: center;
   }
 
-  /* Smooth Staggered Rows Appearance */
-  .children-table tbody tr {
+  /* Row Appear Base Animation */
+  .run-animation .children-table tbody tr {
     animation: rowAppear 0.4s ease-out backwards;
   }
 
@@ -194,7 +193,7 @@
   .row-total-label { background: var(--blue-light); font-weight: 700; }
   .row-grand { background: var(--yellow); font-weight: 700; }
 
-  /* ===== RIGHT: OFF DAY + LEAVE ===== */
+  /* ===== RIGHT SECTION ===== */
   .right-section {
     flex: 1;
     display: flex;
@@ -274,10 +273,9 @@
     padding: 12px;
     border-top: 4px solid var(--green-dark);
     margin-top: auto;
-    transition: background 0.3s ease;
   }
 
-  /* ===== EDIT MODAL & ANIMATIONS ===== */
+  /* ===== MODAL & CHIPS ===== */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -289,10 +287,7 @@
     opacity: 0;
     transition: opacity 0.3s ease;
   }
-  .modal-overlay.open { 
-    display: flex; 
-    opacity: 1;
-  }
+  .modal-overlay.open { display: flex; opacity: 1; }
 
   .modal {
     background: #0a220a;
@@ -307,9 +302,7 @@
     transform: scale(0.7);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  .modal-overlay.open .modal {
-    transform: scale(1);
-  }
+  .modal-overlay.open .modal { transform: scale(1); }
 
   .modal h2 {
     font-family: 'Teko', sans-serif;
@@ -341,14 +334,7 @@
   }
 
   .modal textarea { resize: vertical; min-height: 60px; }
-
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
-    justify-content: flex-end;
-  }
-
+  .modal-actions { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
   .btn-save { background: var(--green-mid); color: var(--yellow); border: 2px solid var(--yellow); border-radius: 6px; padding: 8px 24px; font-weight: 700; cursor: pointer; }
   .btn-cancel { background: #7c1a1a; color: #fff; border: 2px solid #ff4d4d; border-radius: 6px; padding: 8px 24px; font-weight: 700; cursor: pointer; }
 
@@ -372,10 +358,9 @@
     cursor: pointer;
     color: #fff;
     user-select: none;
-    transition: all 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    transition: all 0.2s ease;
   }
   
-  /* Chip bounce zoom selection effect */
   .chip.selected { 
     background: var(--yellow); 
     border-color: var(--yellow); 
@@ -386,42 +371,21 @@
 
   /* ===== ANIMATIONS KEYFRAMES ===== */
   @keyframes cardEntrance {
-    from {
-      opacity: 0;
-      transform: translateY(40px) scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(30px) scale(0.99); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   @keyframes rowAppear {
-    from {
-      opacity: 0;
-      transform: translateX(-15px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(-15px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
   @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -513,6 +477,10 @@ function formatDisplayDate(dateStr) {
 }
 
 function render() {
+  const card = document.getElementById('rosterCard');
+  // Dynamic refresh animation container
+  card.classList.remove('run-animation');
+
   const day = document.getElementById('daySelect').value;
   const dateVal = document.getElementById('dateInput').value;
   const data = rosterData[day];
@@ -529,13 +497,11 @@ function render() {
   let morningTotal = data.morning.length;
   let eveningTotal = data.evening.length;
 
-  let index = 0; // Animation delay matrix er jonno count
+  let index = 0;
 
   ALL_CHILDREN.forEach(name => {
     const isMorning = morningSet.has(name);
     const isEvening = eveningSet.has(name);
-
-    // Dynamic delay inline frame variable generate korar logic
     let delay = (index * 0.03) + 's';
 
     if (isMorning && isEvening) {
@@ -565,7 +531,7 @@ function render() {
   const offdayNames = data.offday.length > 0 ? data.offday.join(', ') : '—';
   const dateDisplay = dateVal ? formatDisplayDate(dateVal) : day;
 
-  document.getElementById('rosterCard').innerHTML = `
+  card.innerHTML = `
     <div class="roster-body">
       <div class="left-section">
         <div class="section-header">CHILDREN</div>
@@ -608,23 +574,36 @@ function render() {
       </div>
     </div>
   `;
+
+  // Trigger smooth rendering layout after nodes injection
+  setTimeout(() => {
+    card.classList.add('run-animation');
+  }, 10);
 }
 
+// ===== ABSOLUTE BULLETPROOF DOWNLOAD BLOCK =====
 function downloadRosterImage() {
   const rosterCard = document.getElementById('rosterCard');
   const selectedDay = document.getElementById('daySelect').value;
   const selectedDate = document.getElementById('dateInput').value || 'roster';
 
-  // Animation layout static frame capture block handle
+  // CRITICAL FIX: Microsecond animation suspension for flawless canvas frame capture
+  rosterCard.classList.remove('run-animation');
+  rosterCard.style.opacity = '1'; 
+
   html2canvas(rosterCard, {
-    scale: 2,
+    scale: 2, // Double quality configuration 
     backgroundColor: '#f4faf4',
-    useCORS: true
+    useCORS: true,
+    logging: false
   }).then(canvas => {
     const link = document.createElement('a');
     link.download = `Roster_${selectedDay}_${selectedDate}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
+
+    // Re-enable app interactive animations post download pipeline
+    rosterCard.classList.add('run-animation');
   });
 }
 
