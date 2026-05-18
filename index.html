@@ -38,60 +38,25 @@ h1 {
   margin-bottom: 20px;
 }
 
-.controls select, .controls input[type="date"], .controls button {
-  padding: 8px 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 6px;
-  border: 2px solid var(--green-mid);
-  font-family: 'Barlow', sans-serif;
-}
-
-.controls select, .controls input[type="date"] {
-  background: #0d2b0d;
-  color: var(--yellow);
-  outline: none;
-}
-
-.controls button {
-  background: var(--green-mid);
-  color: white;
-  cursor: pointer;
-  border-color: var(--yellow);
-  font-weight: 700;
-}
-
-.controls button:hover {
-  background: var(--green-dark);
-}
-
 .roster-card {
   background: #f4faf4;
   border: 4px solid var(--green-dark);
   border-radius: 12px;
   width: 100%;
   max-width: 860px;
-  overflow: hidden;
 }
 
 .roster-body {
   display: flex;
 }
 
-@media (max-width: 600px) {
-  .roster-body { flex-direction: column; }
-  .left-section { border-right: none !important; border-bottom: 4px solid var(--green-dark); }
-}
-
 .left-section {
-  flex: 1.2;
+  flex: 1;
   border-right: 4px solid var(--green-dark);
 }
 
 .right-section {
   flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .section-header {
@@ -100,8 +65,6 @@ h1 {
   text-align: center;
   padding: 8px;
   font-family: 'Teko';
-  font-size: 1.4rem;
-  letter-spacing: 1px;
 }
 
 .children-table, .right-table {
@@ -112,22 +75,8 @@ h1 {
 .children-table th, .children-table td,
 .right-table th, .right-table td {
   border: 1px solid #999;
-  padding: 8px;
+  padding: 6px;
   text-align: center;
-  color: #000;
-  font-weight: 600;
-}
-
-.children-table th, .right-table th {
-  background: #a3dba3;
-  font-weight: 700;
-}
-
-.offday-text {
-  color: #b30000;
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding: 15px !important;
 }
 
 .date-cell {
@@ -135,13 +84,10 @@ h1 {
   color: var(--yellow);
   text-align: center;
   font-family: 'Teko';
-  padding: 12px;
-  font-size: 1.6rem;
-  letter-spacing: 1px;
-  margin-top: auto; /* Pushes date to the absolute bottom of right panel */
+  padding: 10px;
 }
 
-/* ✅ AARONG STYLE FOOTER */
+/* ✅ AARONG STYLE */
 .footer-aarong {
   width: 100%;
   text-align: center;
@@ -150,9 +96,8 @@ h1 {
   letter-spacing: 6px;
   color: var(--orange);
   font-weight: 700;
-  padding: 10px 0;
+  padding: 15px 0;
   border-top: 4px solid var(--green-dark);
-  background: #ffffff;
 }
 </style>
 
@@ -165,172 +110,67 @@ h1 {
 
 <div class="controls">
   <select id="daySelect">
-    <option value="Saturday">Saturday</option>
-    <option value="Sunday">Sunday</option>
-    <option value="Monday">Monday</option>
-    <option value="Tuesday">Tuesday</option>
-    <option value="Wednesday">Wednesday</option>
-    <option value="Thursday">Thursday</option>
-    <option value="Friday">Friday</option>
+    <option>Saturday</option>
+    <option>Sunday</option>
+    <option>Monday</option>
   </select>
 
   <input type="date" id="dateInput">
 
-  <button onclick="download()">📥 Download Image</button>
+  <button onclick="render()">Load</button>
+  <button onclick="download()">Download</button>
 </div>
 
 <div class="roster-card" id="rosterCard"></div>
 
 <script>
-// 7 Days Master Data (Morning & Evening base template)
-// Konor person-er offday thakle ta niche script processing-e automatic duty cell theke filter out hoye jabe.
-const baseRosterData = {
-  Saturday: {
-    morning: ["Juie", "Yeasmin", "Rida", "Anila", "Sumaya", "Afrain", "Alvee"],
-    evening: ["Runu", "Mou", "Onti", "Jiniya", "Nafisa", "Arifa", "Saied", "Ashik", "suikraching"]
-  },
-  Sunday: {
-    morning: ["Yeasmin", "Onti", "Nafisa", "Saied", "Anika", "Ashik", "suikraching"],
-    evening: ["Juie", "Arifa", "Afrain", "Runu", "Arpita", "Jiniya", "Sumaya", "Alvee", "Raton"]
-  },
+const data = {
   Monday: {
-    morning: ["Mou", "Juie", "Sumaya", "Runu", "Raton", "Alvee", "Afrain"],
-    evening: ["Yeasmin", "Jiniya", "suikraching", "Onti", "Ashik", "Arpita", "Hasib", "Anika", "Anila", "Rida"]
-  },
-  Tuesday: {
-    morning: ["Onti", "Rida", "Runu", "Anika", "Hasib", "Saied", "suikraching"],
-    evening: ["Juie", "Afrain", "Nafisa", "Ashik", "Mou", "Arpita", "Anila", "Raton", "Alvee"]
-  },
-  Wednesday: {
-    morning: ["Juie", "Yeasmin", "Hasib", "Nafisa", "Anila", "Sumaya", "Alvee"],
-    evening: ["Mou", "Saied", "Arifa", "Rida", "Jiniya", "Runu", "Anika", "Arpita", "suikraching", "Raton"]
-  },
-  Thursday: {
-    morning: ["Mou", "Hasib", "Rida", "Arpita", "Yeasmin", "Anika", "Saied"],
-    evening: ["Onti", "Sumaya", "Runu", "Nafisa", "Anila", "Afrain", "Jiniya", "Arifa", "Ashik", "Raton"]
-  },
-  Friday: {
-    morning: ["Onti", "Mou", "Afrain", "Anila", "Nafisa", "suikraching", "Raton"],
-    evening: ["Sumaya", "Jiniya", "Saied", "Juie", "Arifa", "Yeasmin", "Arpita", "Ashik", "Rida", "Hasib", "Anika", "Alvee"]
+    morning: ["Alvee","Rida"],
+    evening: ["Onti","Mou"],
+    offday: ["Sumaya"],
   }
-};
-
-// ✅ Apnar deya complete static Weekly Offday List mapping
-const weeklyOffdays = {
-  Saturday: ["Anika", "Arpita", "Raton"],
-  Sunday: ["Mou", "Hasib", "Anila", "Rida"],
-  Monday: ["Saied", "Arifa", "Nafisa"],
-  Tuesday: ["Yeasmin", "Sumaya", "Jiniya"],
-  Wednesday: ["Ashik", "Afrain", "Onti"],
-  Thursday: ["Juie", "suikraching", "Alvee"],
-  Friday: ["Runu"]
 };
 
 function render() {
   const day = document.getElementById('daySelect').value;
-  const dateVal = document.getElementById('dateInput').value;
-  
-  const baseData = baseRosterData[day];
-  const offdayList = weeklyOffdays[day] || [];
-
-  // Data processing sets filtering offday profiles
-  const offdaySet = new Set(offdayList.map(name => name.toLowerCase().trim()));
-
-  // Filter out any persons who have an offday on the current selected day
-  const activeMorning = baseData.morning.filter(name => !offdaySet.has(name.toLowerCase().trim()));
-  const activeEvening = baseData.evening.filter(name => !offdaySet.has(name.toLowerCase().trim()));
-
-  // Render Left Section Matrix rows setup
-  let tableRows = "";
-  
-  activeMorning.forEach(name => {
-    tableRows += `<tr style="background: var(--green-pale)"><td>${name}</td><td>1</td><td></td></tr>`;
-  });
-
-  activeEvening.forEach(name => {
-    tableRows += `<tr style="background: #ffe3e3"><td>${name}</td><td></td><td>1</td></tr>`;
-  });
-
-  // Display Format Configuration
-  let displayDate = day;
-  if (dateVal) {
-    const d = new Date(dateVal + 'T00:00:00');
-    displayDate = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-  }
-
-  const offdayString = offdayList.length > 0 ? offdayList.join(", ") : "None";
+  const d = data[day] || data["Monday"];
 
   document.getElementById('rosterCard').innerHTML = `
     <div class="roster-body">
       <div class="left-section">
-        <div class="section-header">SHIFT MATRIX</div>
+        <div class="section-header">CHILDREN</div>
         <table class="children-table">
-          <thead>
-            <tr><th>Name</th><th>M</th><th>E</th></tr>
-          </thead>
-          <tbody>
-            ${tableRows}
-          </tbody>
+          <tr><th>Name</th><th>M</th><th>E</th></tr>
+          ${[...d.morning.map(n=>`<tr><td>${n}</td><td>1</td><td></td></tr>`),
+             ...d.evening.map(n=>`<tr><td>${n}</td><td></td><td>1</td></tr>`)].join("")}
         </table>
       </div>
 
       <div class="right-section">
-        <div class="section-header">OFFDAY TRACK</div>
+        <div class="section-header">OFFDAY</div>
         <table class="right-table">
-          <thead>
-            <tr><th>Status</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="offday-text">${offdayString}</td></tr>
-          </tbody>
+          <tr><td>${d.offday.join(", ")}</td></tr>
         </table>
-        <div class="date-cell">${displayDate}</div>
+        <div class="date-cell">${day}</div>
       </div>
     </div>
 
+    <!-- ✅ inside card -->
     <div class="footer-aarong">AARONG</div>
   `;
 }
 
 function download() {
-  html2canvas(document.getElementById('rosterCard'), { scale: 2 }).then(canvas => {
+  html2canvas(document.getElementById('rosterCard')).then(canvas => {
     const link = document.createElement('a');
-    const day = document.getElementById('daySelect').value;
-    link.download = `Roster_${day}.png`;
+    link.download = "roster.png";
     link.href = canvas.toDataURL();
     link.click();
   });
 }
 
-// Automatically bind native date changes to day select elements syncing
-document.getElementById('dateInput').addEventListener('change', function() {
-  if (this.value) {
-    const d = new Date(this.value + 'T00:00:00');
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    document.getElementById('daySelect').value = days[d.getDay()];
-  }
-  render();
-});
-
-document.getElementById('daySelect').addEventListener('change', render);
-
-// Initialize with current time logic layout
-function initCurrentDay() {
-  const bdTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" });
-  const bdDate = new Date(bdTime);
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  
-  document.getElementById('daySelect').value = days[bdDate.getDay()];
-  
-  const y = bdDate.getFullYear();
-  const m = String(bdDate.getMonth() + 1).padStart(2, '0');
-  const d = String(bdDate.getDate()).padStart(2, '0');
-  document.getElementById('dateInput').value = `${y}-${m}-${d}`;
-  
-  render();
-}
-
-initCurrentDay();
+render();
 </script>
 
 </body>
