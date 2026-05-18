@@ -4,481 +4,174 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Children Duty Roster</title>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Barlow:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Barlow:wght@400;500;600;700&display=swap');
 
-  :root {
-    --green-dark: #114b11;
-    --green-mid: #1e6b1e;
-    --green-light: #a3ffa3;
-    --green-pale: #d4f7d4;
-    --yellow: #FFD700;
-    --orange: #E67E22;
-    --red-light: #ffe3e3;
-    --blue-light: #cfe2ff;
-    --white: #ffffff;
-    --border: #444;
-  }
+:root {
+  --green-dark: #114b11;
+  --green-mid: #1e6b1e;
+  --green-pale: #d4f7d4;
+  --yellow: #FFD700;
+  --orange: #E67E22;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0f0f1a;
+  font-family: 'Barlow', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 
-  body {
-    background: #0f0f1a;
-    font-family: 'Barlow', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    overflow-x: hidden;
-  }
+h1 {
+  font-family: 'Teko', sans-serif;
+  color: var(--yellow);
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
 
-  h1 {
-    font-family: 'Teko', sans-serif;
-    color: var(--yellow);
-    font-size: 2.5rem;
-    letter-spacing: 4px;
-    margin-bottom: 18px;
-    text-shadow: 0 0 15px rgba(255,215,0,0.5);
-    animation: fadeInDown 0.8s ease-out;
-  }
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-  .controls {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 22px;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 1s ease-out;
-  }
+.roster-card {
+  background: #f4faf4;
+  border: 4px solid var(--green-dark);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 860px;
+}
 
-  .controls label {
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+.roster-body {
+  display: flex;
+}
 
-  .controls select, .controls input[type="date"] {
-    background: #0d2b0d;
-    color: var(--yellow);
-    border: 2px solid var(--green-mid);
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 1rem;
-    font-weight: 600;
-    font-family: 'Barlow', sans-serif;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
-  }
+.left-section {
+  flex: 1;
+  border-right: 4px solid var(--green-dark);
+}
 
-  .controls select:focus, .controls input[type="date"]:focus {
-    border-color: var(--yellow);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  }
+.right-section {
+  flex: 1;
+}
 
-  .controls button {
-    background: var(--green-mid);
-    color: #fff;
-    border: 2px solid var(--yellow);
-    border-radius: 6px;
-    padding: 8px 20px;
-    font-size: 1rem;
-    font-weight: 700;
-    font-family: 'Barlow', sans-serif;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  .controls button:hover { 
-    background: var(--green-dark); 
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(30, 107, 30, 0.4);
-  }
+.section-header {
+  background: var(--green-dark);
+  color: white;
+  text-align: center;
+  padding: 8px;
+  font-family: 'Teko';
+}
 
-  .controls button:active { transform: translateY(1px); }
+.children-table, .right-table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-  .btn-download {
-    background: #2980b9 !important;
-    border-color: #3498db !important;
-  }
-  .btn-download:hover {
-    background: #1f618d !important;
-    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4) !important;
-  }
+.children-table th, .children-table td,
+.right-table th, .right-table td {
+  border: 1px solid #999;
+  padding: 6px;
+  text-align: center;
+}
 
-  /* ===== MAIN ROSTER CARD ===== */
-  .roster-card {
-    background: #f4faf4;
-    border: 4px solid var(--green-dark);
-    border-radius: 12px;
-    overflow: hidden;
-    width: 100%;
-    max-width: 860px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    opacity: 0;
-    position: relative;
-  }
+.date-cell {
+  background: var(--green-dark);
+  color: var(--yellow);
+  text-align: center;
+  font-family: 'Teko';
+  padding: 10px;
+}
 
-  .roster-card.run-animation {
-    animation: cardEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
-  }
-
-  /* ===== BRAND ROSTER HEADER WITH DOUBLE LOGO ===== */
-  .roster-header {
-    background: var(--green-dark);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 25px;
-    border-bottom: 3px solid var(--yellow);
-  }
-
-  /* Aarong Typography Styled Crisp Logo Container */
-  .aarong-logo-box {
-    background: rgba(255,255,255,0.95);
-    padding: 4px 14px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .aarong-logo-text {
-    font-family: 'Barlow', sans-serif;
-    font-weight: 800;
-    font-size: 1.3rem;
-    color: #114b11;
-    letter-spacing: -0.5px;
-  }
-
-  .roster-header-title {
-    font-family: 'Teko', sans-serif;
-    color: var(--yellow);
-    font-size: 2.2rem;
-    letter-spacing: 3px;
-    font-weight: 700;
-    line-height: 1;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-    text-align: center;
-    flex: 1;
-  }
-
-  .roster-body {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-  }
-
-  @media (max-width: 768px) {
-    .roster-body { flex-direction: column; }
-    .left-section { border-right: none !important; border-bottom: 4px solid var(--green-dark); }
-    .roster-header { flex-direction: row; padding: 10px; }
-    .roster-header-title { font-size: 1.6rem; letter-spacing: 1px; }
-    .aarong-logo-box { padding: 3px 8px; }
-    .aarong-logo-text { font-size: 0.95rem; }
-  }
-
-  /* ===== LEFT SECTION WITH BLURRED WATERMARK ===== */
-  .left-section {
-    flex: 1.1;
-    border-right: 4px solid var(--green-dark);
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Blurred Table Watermark */
-  .left-section::before {
-    content: "aarong";
-    position: absolute;
-    font-family: 'Barlow', sans-serif;
-    font-weight: 800;
-    font-size: 6.5rem;
-    color: rgba(17, 75, 17, 0.045);
-    filter: blur(1px);
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-15deg);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .section-header {
-    background: #195d19;
-    color: var(--white);
-    text-align: center;
-    font-family: 'Teko', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 2px;
-    padding: 6px 0;
-    font-weight: 600;
-    border-bottom: 1px solid var(--green-dark);
-    position: relative;
-    z-index: 1;
-  }
-
-  .children-table {
-    width: 100%;
-    border-collapse: collapse;
-    position: relative;
-    z-index: 1;
-  }
-
-  .children-table th {
-    background: #a3dba3;
-    color: #000;
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 8px;
-    border: 1px solid var(--border);
-    text-align: center;
-  }
-
-  .children-table td {
-    padding: 6px 10px;
-    border: 1px solid #999;
-    font-size: 0.95rem;
-    color: #000;
-    font-weight: 600;
-    text-align: center;
-  }
-
-  .run-animation .children-table tbody tr {
-    animation: rowAppear 0.4s ease-out backwards;
-  }
-
-  /* Semi-transparent row backgrounds to let watermark pass smoothly */
-  .row-morning { background: rgba(212, 247, 212, 0.88); }
-  .row-both { background: rgba(255, 224, 178, 0.88); }
-  .row-evening { background: rgba(255, 227, 227, 0.88); }
-  .row-zero { background: rgba(224, 224, 224, 0.8); color: #666; }
-  .row-total-label { background: rgba(207, 226, 255, 0.9); font-weight: 700; }
-  .row-grand { background: rgba(255, 215, 0, 0.95); font-weight: 700; }
-
-  /* ===== RIGHT SECTION WITH BLURRED WATERMARK ===== */
-  .right-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Right Side Blurred Watermark */
-  .right-section::before {
-    content: "aarong";
-    position: absolute;
-    font-family: 'Barlow', sans-serif;
-    font-weight: 800;
-    font-size: 5rem;
-    color: rgba(17, 75, 17, 0.04);
-    filter: blur(1px);
-    bottom: 25%;
-    left: 50%;
-    transform: translate(-50%, 0) rotate(10deg);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .offday-header {
-    background: #ecc200;
-    color: #111;
-    text-align: center;
-    font-family: 'Teko', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 2px;
-    padding: 6px 0;
-    font-weight: 600;
-    border-bottom: 1px solid var(--green-dark);
-    position: relative;
-    z-index: 1;
-  }
-
-  .right-table {
-    width: 100%;
-    border-collapse: collapse;
-    position: relative;
-    z-index: 1;
-  }
-
-  .right-table th {
-    background: #a3dba3;
-    color: #000;
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 8px;
-    border: 1px solid var(--border);
-    text-align: center;
-  }
-
-  .right-table td {
-    padding: 8px 12px;
-    border: 1px solid #999;
-    font-size: 0.95rem;
-    color: #000;
-    font-weight: 600;
-  }
-
-  .offday-row td { background: rgba(255, 253, 230, 0.88); }
-  .offday-names { color: #b30000; font-weight: 700; }
-
-  .leave-header-row td {
-    background: var(--green-mid);
-    color: white;
-    font-weight: 700;
-    text-align: center;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    padding: 6px;
-  }
-
-  .leave-row { background: rgba(255, 249, 230, 0.85); }
-  .leave-row td:first-child { font-weight: 700; color: #111; }
-
-  .trail-header-row td {
-    background: var(--orange);
-    color: white;
-    font-weight: 700;
-    text-align: center;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    padding: 6px;
-  }
-
-  .trail-row { background: rgba(240, 248, 255, 0.85); }
-  .trail-row td { padding: 8px 12px; }
-
-  .date-cell {
-    background: var(--green-dark);
-    color: var(--yellow);
-    text-align: center;
-    font-family: 'Teko', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    padding: 12px;
-    border-top: 4px solid var(--green-dark);
-    margin-top: auto;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ===== MODAL & CHIPS ===== */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .modal-overlay.open { display: flex; opacity: 1; }
-
-  .modal {
-    background: #0a220a;
-    border: 2px solid var(--yellow);
-    border-radius: 12px;
-    padding: 24px;
-    width: 95%;
-    max-width: 540px;
-    color: var(--white);
-    max-height: 90vh;
-    overflow-y: auto;
-    transform: scale(0.7);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  .modal-overlay.open .modal { transform: scale(1); }
-
-  .modal h2 {
-    font-family: 'Teko', sans-serif;
-    color: var(--yellow);
-    font-size: 1.8rem;
-    margin-bottom: 12px;
-    letter-spacing: 2px;
-  }
-
-  .modal label {
-    display: block;
-    color: #fff;
-    margin-top: 12px;
-    margin-bottom: 4px;
-    font-weight: 700;
-    font-size: 0.95rem;
-  }
-
-  .modal input, .modal textarea, .modal select {
-    width: 100%;
-    background: #144414;
-    color: #fff;
-    border: 1px solid var(--yellow);
-    border-radius: 5px;
-    padding: 8px 12px;
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.95rem;
-    outline: none;
-  }
-
-  .modal textarea { resize: vertical; min-height: 60px; }
-  .modal-actions { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
-  .btn-save { background: var(--green-mid); color: var(--yellow); border: 2px solid var(--yellow); border-radius: 6px; padding: 8px 24px; font-weight: 700; cursor: pointer; }
-  .btn-cancel { background: #7c1a1a; color: #fff; border: 2px solid #ff4d4d; border-radius: 6px; padding: 8px 24px; font-weight: 700; cursor: pointer; }
-
-  .name-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 6px;
-    background: #0d2b0d;
-    padding: 10px;
-    border-radius: 6px;
-  }
-
-  .chip {
-    background: #1b521b;
-    border: 1px solid #555;
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    color: #fff;
-    user-select: none;
-    transition: all 0.2s ease;
-  }
-  
-  .chip.selected { 
-    background: var(--yellow); 
-    border-color: var(--yellow); 
-    color: #000; 
-    font-weight: 700;
-    transform: scale(1.05);
-  }
-
-  /* ===== ANIMATIONS KEYFRAMES ===== */
-  @keyframes cardEntrance {
-    from { opacity: 0; transform: translateY(30px) scale(0.99); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  @keyframes rowAppear {
-    from { opacity: 0; transform: translateX(-15px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+/* ✅ AARONG STYLE */
+.footer-aarong {
+  width: 100%;
+  text-align: center;
+  font-family: 'Teko';
+  font-size: 3rem;
+  letter-spacing: 6px;
+  color: var(--orange);
+  font-weight: 700;
+  padding: 15px 0;
+  border-top: 4px solid var(--green-dark);
+}
 </style>
 
-<script src="
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body>
+
+<h1>📋 CHILDREN DUTY ROSTER</h1>
+
+<div class="controls">
+  <select id="daySelect">
+    <option>Saturday</option>
+    <option>Sunday</option>
+    <option>Monday</option>
+  </select>
+
+  <input type="date" id="dateInput">
+
+  <button onclick="render()">Load</button>
+  <button onclick="download()">Download</button>
+</div>
+
+<div class="roster-card" id="rosterCard"></div>
+
+<script>
+const data = {
+  Monday: {
+    morning: ["Alvee","Rida"],
+    evening: ["Onti","Mou"],
+    offday: ["Sumaya"],
+  }
+};
+
+function render() {
+  const day = document.getElementById('daySelect').value;
+  const d = data[day] || data["Monday"];
+
+  document.getElementById('rosterCard').innerHTML = `
+    <div class="roster-body">
+      <div class="left-section">
+        <div class="section-header">CHILDREN</div>
+        <table class="children-table">
+          <tr><th>Name</th><th>M</th><th>E</th></tr>
+          ${[...d.morning.map(n=>`<tr><td>${n}</td><td>1</td><td></td></tr>`),
+             ...d.evening.map(n=>`<tr><td>${n}</td><td></td><td>1</td></tr>`)].join("")}
+        </table>
+      </div>
+
+      <div class="right-section">
+        <div class="section-header">OFFDAY</div>
+        <table class="right-table">
+          <tr><td>${d.offday.join(", ")}</td></tr>
+        </table>
+        <div class="date-cell">${day}</div>
+      </div>
+    </div>
+
+    <!-- ✅ inside card -->
+    <div class="footer-aarong">AARONG</div>
+  `;
+}
+
+function download() {
+  html2canvas(document.getElementById('rosterCard')).then(canvas => {
+    const link = document.createElement('a');
+    link.download = "roster.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
