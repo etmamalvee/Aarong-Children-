@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Children Duty Roster</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Barlow:wght@400;500;600;700;800&display=swap');
 
   :root {
     --green-dark: #1a6b1a;
@@ -53,7 +53,7 @@
 
   .controls label {
     color: var(--green-light);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1rem;
   }
 
@@ -67,6 +67,7 @@
     font-family: 'Barlow', sans-serif;
     cursor: pointer;
     outline: none;
+    font-weight: 700;
   }
 
   .controls input[type="date"] {
@@ -79,6 +80,7 @@
     font-family: 'Barlow', sans-serif;
     cursor: pointer;
     outline: none;
+    font-weight: 700;
   }
 
   .controls button {
@@ -88,7 +90,7 @@
     border-radius: 6px;
     padding: 7px 18px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     font-family: 'Barlow', sans-serif;
     cursor: pointer;
     transition: background 0.2s;
@@ -136,25 +138,42 @@
   .children-table th {
     background: #b8e8b8;
     color: #1a1a1a;
-    font-weight: 700;
-    font-size: 0.88rem;
-    padding: 5px 8px;
+    font-weight: 800; /* থিম হেডার আরও মোটা করা হলো */
+    font-size: 0.95rem;
+    padding: 6px 8px;
     border: 1px solid var(--border);
     text-align: center;
   }
 
+  /* টেবিলের ভেতরের সব ডিজিট এবং টেক্সট বোল্ড করার জন্য */
   .children-table td {
-    padding: 4px 8px;
+    padding: 6px 8px;
     border: 1px solid #aaa;
-    font-size: 0.87rem;
+    font-size: 0.95rem;
     text-align: center;
+    font-weight: 700; /* সাধারণ ডিজিট ও নাম 700 বোল্ড করা হলো */
+    color: #111;
   }
 
-  .row-morning { background: var(--green-pale); }
-  .row-evening { background: var(--red-light); }
-  .row-zero { background: #e0e0e0; color: #888; }
-  .row-total-label { background: var(--blue-light); font-weight: 700; }
-  .row-grand { background: var(--yellow); font-weight: 700; }
+  /* স্পেসিফিক রো এর স্টাইল ও টেক্সট কালার আরও ফুটিয়ে তোলা হলো */
+  .row-morning { background: var(--green-pale); color: #0f3d0f; }
+  .row-evening { background: var(--red-light); color: #780000; }
+  .row-both { background: #ffe0b2; color: #b75300; }
+  .row-zero { background: #e0e0e0; color: #777; }
+  
+  .row-total-label td { 
+    background: var(--blue-light); 
+    font-weight: 800; /* টোটাল ডিজিট বেশি মোটা করা হলো */
+    font-size: 1.05rem;
+    color: #003366;
+  }
+  
+  .row-grand td { 
+    background: var(--yellow); 
+    font-weight: 800; /* গ্র্যান্ড টোটাল সবচেয়ে বেশি স্পষ্ট করা হলো */
+    font-size: 1.1rem;
+    color: #000;
+  }
 
   /* ===== RIGHT: OFF DAY + LEAVE + TRAIL ===== */
   .right-section {
@@ -182,45 +201,47 @@
   .right-table th {
     background: #b8e8b8;
     color: #1a1a1a;
-    font-weight: 700;
-    font-size: 0.88rem;
-    padding: 5px 8px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 6px 8px;
     border: 1px solid var(--border);
     text-align: center;
   }
 
   .right-table td {
-    padding: 5px 10px;
+    padding: 7px 10px;
     border: 1px solid #aaa;
-    font-size: 0.87rem;
+    font-size: 0.95rem;
+    font-weight: 700; /* ডান পাশের টেবিলের টেক্সটও বোল্ড */
+    color: #111;
   }
 
   .offday-row td { background: var(--green-pale); }
-  .offday-names { color: #c0392b; font-weight: 600; }
+  .offday-names { color: #c0392b; font-weight: 800; }
 
   .leave-header-row td {
     background: var(--green-mid);
     color: white;
-    font-weight: 700;
+    font-weight: 800;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     letter-spacing: 1px;
   }
 
   .leave-row { background: #fff9e6; }
-  .leave-row td:first-child { font-weight: 600; }
+  .leave-row td:last-child { font-weight: 800; color: #2d8a2d; } /* লিভ কোড (L18, E19) বোল্ড করা হলো */
 
   .trail-header-row td {
     background: var(--orange);
     color: white;
-    font-weight: 700;
+    font-weight: 800;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     letter-spacing: 1px;
   }
 
   .trail-row { background: #f0f8ff; }
-  .trail-row td { padding: 10px; font-weight: 600; }
+  .trail-row td { padding: 10px; font-weight: 700; }
 
   .date-cell {
     background: var(--green-mid);
@@ -270,7 +291,7 @@
     color: var(--green-light);
     margin-top: 10px;
     margin-bottom: 3px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.9rem;
   }
 
@@ -284,6 +305,7 @@
     font-family: 'Barlow', sans-serif;
     font-size: 0.9rem;
     outline: none;
+    font-weight: 600;
   }
 
   .modal textarea { resize: vertical; min-height: 60px; }
@@ -333,8 +355,9 @@
     color: #cfc;
     user-select: none;
     transition: background 0.15s;
+    font-weight: 600;
   }
-  .chip.selected { background: var(--green-dark); border-color: var(--yellow); color: var(--yellow); font-weight: 600; }
+  .chip.selected { background: var(--green-dark); border-color: var(--yellow); color: var(--yellow); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -347,7 +370,7 @@
     <option value="Saturday">Saturday</option>
     <option value="Sunday">Sunday</option>
     <option value="Monday">Monday</option>
-    <option value="Tuesday" selected>Tuesday</option>
+    <option value="Tuesday">Tuesday</option>
     <option value="Wednesday">Wednesday</option>
     <option value="Thursday">Thursday</option>
     <option value="Friday">Friday</option>
@@ -359,8 +382,7 @@
   <button onclick="openEditModal()">✏️ Edit</button>
 </div>
 
-<div class="roster-card" id="rosterCard">
-  </div>
+<div class="roster-card" id="rosterCard"></div>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
@@ -397,14 +419,12 @@
 </div>
 
 <script>
-// ===== ALL CHILDREN =====
 const ALL_CHILDREN = [
   "Onti","Rida","Runu","Anika","Hasib","Saied","Suikraching",
   "Juie","Afrain","Nafisa","Ashik","Abrar","Mou","Arpita","Anila","Ratan","Alvee",
   "Yeasmin","Sumaya","Jiniya","Arifa","Ashiq"
 ];
 
-// ===== DEFAULT DATA (Fixed Saturday Offday name typo) =====
 let rosterData = {
   Saturday: {
     morning: ["Juie","Yeasmin","Rida","Anila","Sumaya","Afrain","Alvee"],
@@ -450,7 +470,6 @@ let rosterData = {
   }
 };
 
-// ===== DATE =====
 function getTodayDate() {
   return new Date().toISOString().split('T')[0];
 }
@@ -462,58 +481,62 @@ function formatDisplayDate(dateStr, dayName) {
   return d.toLocaleDateString('en-US', opts);
 }
 
-// ===== RENDER =====
 function render() {
   const day = document.getElementById('daySelect').value;
   const dateVal = document.getElementById('dateInput').value;
   const data = rosterData[day];
 
+  if (!data) return;
+
   const morningSet = new Set(data.morning);
   const eveningSet = new Set(data.evening);
 
-  // Build children rows
-  let morningRows = '';
-  let eveningRows = '';
-  let morningCount = 0, eveningCount = 0;
+  let tableRows = '';
+  let morningCount = data.morning ? data.morning.length : 0;
+  let eveningCount = data.evening ? data.evening.length : 0;
 
-  // Morning children
-  data.morning.forEach(name => {
-    morningRows += `<tr class="row-morning">
-      <td>${name}</td>
-      <td>1</td>
-      <td></td>
-    </tr>`;
-    morningCount++;
-  });
+  // ১. শুধু মর্নিং শিফট
+  if (data.morning) {
+    data.morning.forEach(name => {
+      if (!eveningSet.has(name)) {
+        tableRows += `<tr class="row-morning">
+          <td>${name}</td>
+          <td>1</td>
+          <td></td>
+        </tr>`;
+      }
+    });
+  }
 
-  // Evening children (not in morning)
-  data.evening.forEach(name => {
-    const inMorning = morningSet.has(name);
-    if (!inMorning) {
-      eveningRows += `<tr class="row-evening">
-        <td>${name}</td>
-        <td></td>
-        <td>1</td>
-      </tr>`;
-      eveningCount++;
-    }
-  });
+  // ২. মর্নিং এবং ইভনিং উভয় শিফট (Both Shifts)
+  if (data.morning) {
+    data.morning.forEach(name => {
+      if (eveningSet.has(name)) {
+        tableRows += `<tr class="row-both">
+          <td>${name}</td>
+          <td>1</td>
+          <td>1</td>
+        </tr>`;
+      }
+    });
+  }
 
-  // Both shift
-  let bothRows = '';
-  data.morning.forEach(name => {
-    if (eveningSet.has(name)) {
-      bothRows += `<tr style="background:#ffe0b2;">
-        <td>${name}</td>
-        <td>1</td>
-        <td>1</td>
-      </tr>`;
-    }
-  });
+  // ৩. শুধু ইভনিং শিফট
+  if (data.evening) {
+    data.evening.forEach(name => {
+      if (!morningSet.has(name)) {
+        tableRows += `<tr class="row-evening">
+          <td>${name}</td>
+          <td></td>
+          <td>1</td>
+        </tr>`;
+      }
+    });
+  }
 
-  // Leave rows
+  // লিভ ডেটা
   let leaveRows = '';
-  const leaveEntries = Object.entries(data.leave);
+  const leaveEntries = data.leave ? Object.entries(data.leave) : [];
   if (leaveEntries.length === 0) {
     leaveRows = `<tr class="leave-row"><td colspan="2" style="text-align:center;color:#aaa;font-style:italic;">No leave data</td></tr>`;
   } else {
@@ -522,7 +545,6 @@ function render() {
     });
   }
 
-  // Offday (Fixed spacing & rendering)
   const offdayNames = data.offday && data.offday.length > 0 ? data.offday.join(', ') : '—';
   const dateDisplay = dateVal ? formatDisplayDate(dateVal, day) : day;
 
@@ -539,9 +561,7 @@ function render() {
             </tr>
           </thead>
           <tbody>
-            ${morningRows}
-            ${bothRows}
-            ${eveningRows}
+            ${tableRows}
             <tr class="row-zero"><td>0</td><td></td><td></td></tr>
             <tr class="row-total-label">
               <td>Total</td>
@@ -588,8 +608,8 @@ function openEditModal() {
   document.getElementById('editDay').value = day;
   buildChips(day);
   const data = rosterData[day];
-  document.getElementById('editOffday').value = data.offday.join(', ');
-  document.getElementById('editLeave').value = Object.entries(data.leave).map(([k,v])=>`${k} ${v}`).join('\n');
+  document.getElementById('editOffday').value = data.offday ? data.offday.join(', ') : '';
+  document.getElementById('editLeave').value = data.leave ? Object.entries(data.leave).map(([k,v])=>`${k} ${v}`).join('\n') : '';
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -607,13 +627,13 @@ function buildChips(day) {
 
   ALL_CHILDREN.forEach(name => {
     const mChip = document.createElement('span');
-    mChip.className = 'chip' + (data.morning.includes(name) ? ' selected' : '');
+    mChip.className = 'chip' + (data.morning && data.morning.includes(name) ? ' selected' : '');
     mChip.textContent = name;
     mChip.onclick = () => mChip.classList.toggle('selected');
     morningDiv.appendChild(mChip);
 
     const eChip = document.createElement('span');
-    eChip.className = 'chip' + (data.evening.includes(name) ? ' selected' : '');
+    eChip.className = 'chip' + (data.evening && data.evening.includes(name) ? ' selected' : '');
     eChip.textContent = name;
     eChip.onclick = () => eChip.classList.toggle('selected');
     eveningDiv.appendChild(eChip);
@@ -642,22 +662,35 @@ function saveEdit() {
 
   rosterData[day] = { morning, evening, offday, leave };
 
-  // Switch to edited day
   document.getElementById('daySelect').value = day;
   closeEditModal();
   render();
 }
 
-// ===== INIT =====
-document.getElementById('dateInput').value = getTodayDate();
+// ইনপুট ডেট পরিবর্তন হলে বার (Day) অটো পরিবর্তন
+document.getElementById('dateInput').addEventListener('change', function() {
+  if (this.value) {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const d = new Date(this.value + 'T00:00:00');
+    const dayName = days[d.getDay()];
+    document.getElementById('daySelect').value = dayName;
+  }
+  render();
+});
+
 document.getElementById('daySelect').addEventListener('change', render);
-document.getElementById('dateInput').addEventListener('change', render);
+
 document.getElementById('editDay').addEventListener('change', function() {
   buildChips(this.value);
   const data = rosterData[this.value];
-  document.getElementById('editOffday').value = data.offday.join(', ');
-  document.getElementById('editLeave').value = Object.entries(data.leave).map(([k,v])=>`${k} ${v}`).join('\n');
+  document.getElementById('editOffday').value = data.offday ? data.offday.join(', ') : '';
+  document.getElementById('editLeave').value = data.leave ? Object.entries(data.leave).map(([k,v])=>`${k} ${v}`).join('\n') : '';
 });
+
+// শুরুর ডেট আজকের সেট করা এবং বার অটো সিলেক্ট করা
+document.getElementById('dateInput').value = getTodayDate();
+const initialDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+document.getElementById('daySelect').value = initialDays[new Date().getDay()];
 
 render();
 </script>
